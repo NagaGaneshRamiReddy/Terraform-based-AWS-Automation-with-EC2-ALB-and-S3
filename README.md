@@ -33,11 +33,24 @@ S3 Bucket: Provides secure storage for files
 Security Groups & VPC: Ensures secure networking and controlled access
 
 Terraform Variables & Outputs: Makes the infrastructure configurable and outputs useful information (ALB URL, EC2 IPs, S3 bucket name)
+Development Process Note
 
-Workflow:
+The project was developed using GitHub Codespaces, which provides a cloud-based development environment.
+
+Packages and setup in Codespaces:
+
+Installed Terraform CLI
+
+Configured AWS CLI with access key, secret key, and default region
+
+Verified AWS account permissions for EC2, S3, and ALB services
+
+This setup allows remote development, testing, and deployment directly from GitHub without local installation.
+-------------------------------------------------------------------------------------
+Workflow:-
 --------------
 
-Define cloud resources in Terraform files (main.tf, variables.tf, outputs.tf)
+Define cloud resources in Terraform files (main.tf)
 
 Initialize Terraform to download AWS provider
 
