@@ -1,184 +1,65 @@
-# Terraform-based-AWS-Automation-with-EC2-ALB-and-S3
-Automated AWS infrastructure deployment using Terraform, including EC2, ALB, and S3, with secure networking and scalable architecture.
-Project Documentation: Terraform AWS Infrastructure
-Project Name
+Terraform AWS Infrastructure Project
+Project
 
-Terraform AWS Infrastructure Automation
+Automated deployment of AWS infrastructure using Terraform, including EC2 instances, an Application Load Balancer (ALB), and an S3 bucket. The project demonstrates Infrastructure as Code (IaC), scalable architecture, and secure cloud setup.
 
-Project Overview
+Problem
 
-This project demonstrates the deployment of real AWS infrastructure using Terraform, including:
+Manually deploying cloud infrastructure is:
 
-EC2 instances with a running Apache web server
+Time-consuming
 
-Application Load Balancer (ALB) distributing traffic across multiple EC2s
+Error-prone
 
-S3 bucket for storage
+Hard to scale and reproduce
 
-Proper security groups and VPC networking
+Difficult to maintain consistently across environments
 
-Fully automated provisioning via Terraform (Infrastructure as Code)
+Companies need automated, scalable, and reproducible infrastructure for cloud applications.
 
-Objective:
-Build a scalable, automated, and verifiable AWS infrastructure project suitable for DevOps, Cloud, or SRE roles.
+Solution / Development
 
-Technologies & Tools Used
-Technology	Purpose
-Terraform	Infrastructure as Code (IaC)
-AWS EC2	Virtual servers
-AWS S3	Storage bucket
-AWS ALB	Load balancing HTTP traffic
-Security Groups	Network security
-VPC & Subnets	Networking & isolation
-Git/GitHub	Version control & portfolio
-Architecture Diagram
-         Internet
-            |
-            |
-   [Application Load Balancer]
-            |
-       -----------------
-       |               |
- [EC2 Instance 1]   [EC2 Instance 2]
-       |
-   Apache Web Server
+This project uses Terraform to automate AWS infrastructure deployment:
 
+EC2 Instances: Two servers hosting a simple web page
 
-ALB distributes HTTP traffic across 2 EC2 instances.
+Application Load Balancer (ALB): Distributes traffic across EC2 instances for high availability
 
-S3 bucket serves as storage for project data or logs.
+S3 Bucket: Provides secure storage for files
 
-Terraform Project Structure
-terraform-aws-project/
-├── main.tf          # Core resources: EC2, ALB, S3, SGs
-├── variables.tf     # Input variables
-├── outputs.tf       # Output resources for verification
-├── terraform.tfvars # Optional variable values
-├── README.md        # Documentation
-└── .gitignore       # Ignore sensitive/state files
+Security Groups & VPC: Ensures secure networking and controlled access
 
-Terraform Resources Explained
-1. Provider
-provider "aws" {
-  region = var.region
-}
+Terraform Variables & Outputs: Makes the infrastructure configurable and outputs useful information (ALB URL, EC2 IPs, S3 bucket name)
 
-2. EC2 Instances
+Workflow:
 
-Count variable allows scaling
+Define cloud resources in Terraform files (main.tf, variables.tf, outputs.tf)
 
-User data installs Apache and serves a basic web page
+Initialize Terraform to download AWS provider
 
-resource "aws_instance" "ec2" {
-  count                      = var.instance_count
-  ami                        = var.ami
-  instance_type              = var.instance_type
-  associate_public_ip_address = true
-  vpc_security_group_ids     = [aws_security_group.ec2_sg.id]
+Apply the configuration to automatically provision resources
 
-  user_data = <<-EOF
-              #!/bin/bash
-              yum install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
-              echo "Hello from EC2 ${count.index + 1}" > /var/www/html/index.html
-              EOF
+Access the ALB DNS to verify deployment
 
-  tags = {
-    Name = "r.n.g-${count.index + 1}"
-  }
-}
+Benefits:
 
-3. S3 Bucket
-resource "aws_s3_bucket" "my_bucket" {
-  bucket = var.s3_bucket_name
+Fully automated, reproducible, and scalable infrastructure
 
-  tags = {
-    Name        = "Terraform S3 Bucket"
-    Environment = "Dev"
-  }
-}
+Secure and modular design using Terraform
 
-4. Application Load Balancer
-resource "aws_lb" "alb" {
-  name               = "r-n-g-alb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = data.aws_subnets.default.ids
-}
+Reduces manual effort and human error
 
-resource "aws_lb_target_group" "tg" {
-  name     = "r-n-g-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = data.aws_vpc.default.id
-}
-
-resource "aws_lb_listener" "listener" {
-  load_balancer_arn = aws_lb.alb.arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.tg.arn
-  }
-}
-
-resource "aws_lb_target_group_attachment" "attach" {
-  count            = var.instance_count
-  target_group_arn = aws_lb_target_group.tg.arn
-  target_id        = aws_instance.ec2[count.index].id
-  port             = 80
-}
-
-5. Security Groups
-
-ALB SG → allows HTTP from anywhere
-
-EC2 SG → allows HTTP only from ALB SG
-
-resource "aws_security_group" "alb_sg" {
-  ...
-}
-
-resource "aws_security_group" "ec2_sg" {
-  ...
-}
-
-6. Outputs
-output "alb_dns" {
-  value = aws_lb.alb.dns_name
-}
-
-output "ec2_public_ips" {
-  value = aws_instance.ec2[*].public_ip
-}
-
-output "s3_bucket_name" {
-  value = aws_s3_bucket.my_bucket.bucket
-}
-
-Setup Instructions
-
-Clone the repo:
-
-git clone https://github.com/<username>/terraform-aws-project.git
-cd terraform-aws-project
-
-
-Initialize Terraform:
-
+Terraform Commands
+# Initialize Terraform (download providers)
 terraform init
 
-
-Plan and apply:
-
+# Show planned resources before deployment
 terraform plan
+
+# Deploy infrastructure
 terraform apply
+# Type 'yes' when prompted
 
-
-Type yes when prompted.
-
-Access the ALB DNS in browser to see load-balanced web pages.
+# Destroy infrastructure when no longer needed
+terraform destroy
+# Type 'yes' when prompted
