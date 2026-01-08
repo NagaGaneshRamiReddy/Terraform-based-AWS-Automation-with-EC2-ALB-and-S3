@@ -1,10 +1,12 @@
 Terraform AWS Infrastructure Project
+------------------------------------------
 Project
+---------
 
 Automated deployment of AWS infrastructure using Terraform, including EC2 instances, an Application Load Balancer (ALB), and an S3 bucket. The project demonstrates Infrastructure as Code (IaC), scalable architecture, and secure cloud setup.
 
-Problem
-
+problem
+---------
 Manually deploying cloud infrastructure is:
 
 Time-consuming
@@ -18,6 +20,7 @@ Difficult to maintain consistently across environments
 Companies need automated, scalable, and reproducible infrastructure for cloud applications.
 
 Solution / Development
+---------------------
 
 This project uses Terraform to automate AWS infrastructure deployment:
 
@@ -32,6 +35,7 @@ Security Groups & VPC: Ensures secure networking and controlled access
 Terraform Variables & Outputs: Makes the infrastructure configurable and outputs useful information (ALB URL, EC2 IPs, S3 bucket name)
 
 Workflow:
+--------------
 
 Define cloud resources in Terraform files (main.tf, variables.tf, outputs.tf)
 
@@ -42,6 +46,7 @@ Apply the configuration to automatically provision resources
 Access the ALB DNS to verify deployment
 
 Benefits:
+-------------
 
 Fully automated, reproducible, and scalable infrastructure
 
