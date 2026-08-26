@@ -76,7 +76,6 @@ terraform plan
 
 # Deploy infrastructure
 terraform apply
-# Type 'yes' when prompted
 
 # Destroy infrastructure when no longer needed
 terraform destroy
