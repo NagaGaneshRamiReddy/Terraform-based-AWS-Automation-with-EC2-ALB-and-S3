@@ -80,4 +80,4 @@ terraform apply
 
 # Destroy infrastructure when no longer needed
 terraform destroy
-# Type 'yes' when prompted
+
